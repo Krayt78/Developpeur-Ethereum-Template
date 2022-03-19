@@ -177,8 +177,6 @@ contract VotingAdmin is VotingData{
         for(uint i = 0; i < proposals.length; i ++){
             proposals.pop();
         }
-
-        proposals.push(Proposal("Default",0));
     }
 
     /**
