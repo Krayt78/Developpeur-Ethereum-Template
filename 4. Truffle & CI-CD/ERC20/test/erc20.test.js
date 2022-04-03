@@ -9,6 +9,8 @@ const _initialsupply = new BN(1000);
 const _decimals = new BN(18);
 const owner = accounts[0];
 const recipient = accounts[1];
+const spender = accounts[0];
+const allowanceAmount = 10;
  
  beforeEach(async function () {
   this.ERC20Instance = await ERC20.new(_initialsupply,{from: owner});
@@ -39,5 +41,11 @@ it('vérifie si un transfer est bien effectué', async function (){
  
   expect(balanceOwnerAfterTransfer).to.be.bignumber.equal(balanceOwnerBeforeTransfer.sub(amount));
   expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
+});
+it('approve:', async function (){
+
+});
+it('transferFrom:', async function (){
+
 });
 });
