@@ -15,10 +15,10 @@ contract('Voting', accounts => {
     const VotingSessionStarted = 3;
     const VotingSessionEnded = 4;
     const VotesTallied = 5;
-    
+
     let VotingInstance;
 
-    describe.skip("Test Modifiers :", function () {
+    describe("Test Modifiers :", function () {
 
         beforeEach(async function () {
             VotingInstance = await Voting.new({from:owner});
@@ -33,7 +33,7 @@ contract('Voting', accounts => {
         describe("2- onlyVoters()", function () {
             it("should not get voter from map, revert", async () => {
                 await VotingInstance.addVoter(first, { from: owner });
-                await expectRevert(VotingInstance.getVoter(first, { from: owner }),'Already registered');
+                await expectRevert(VotingInstance.getVoter(first, { from: owner }),'You\'re not a voter');
             });
     
             it("should not store voter in map, revert", async () => {
@@ -42,24 +42,35 @@ contract('Voting', accounts => {
         });
     });
 
-    describe.skip("Voter :", function () {
+    describe("Voter :", function () {
 
         let storedData;
 
-        describe("1- Events", function () {
-            before(async function() {
-                VotingInstance = await Voting.new({from:owner});
+        beforeEach(async function() {
+            VotingInstance = await Voting.new({from:owner});
+        });
+
+        describe("1- Required", function () {
+            it("shouldnt register a new voter, revert", async () => {
+                workflowStatusChangeFrunction = await VotingInstance.startProposalsRegistering({from:owner});
+                await expectRevert(VotingInstance.addVoter(owner,{from:owner}), 'Voters registration is not open yet');
             });
 
+            it("shouldnt register a new voter, revert", async () => {
+                await VotingInstance.addVoter(owner, { from: owner });
+                await expectRevert(VotingInstance.addVoter(owner,{from:owner}), 'Already registered');
+            });
+        });
+
+        describe("2- Events", function () {
             it("should store voter in map, get Event VoterRegistered", async () => {
                 const beforeFunction = await VotingInstance.addVoter(owner, { from: owner });
                 expectEvent(beforeFunction,"VoterRegistered" ,{voterAddress: owner});
             });
         });
 
-        describe("2- getVoter()/addVoter()", function () {
+        describe("3- getVoter()/addVoter()", function () {
             beforeEach(async function () {
-                VotingInstance = await Voting.new({from:owner});
                 await VotingInstance.addVoter(owner, { from: owner });
                 storedData = await VotingInstance.getVoter(owner, { from: owner });
             });
@@ -79,7 +90,7 @@ contract('Voting', accounts => {
 
     });
 
-    describe.skip("Proposal :", function () {
+    describe("Proposal :", function () {
 
         beforeEach(async function () {
             VotingInstance = await Voting.new({from:owner});
@@ -137,7 +148,7 @@ contract('Voting', accounts => {
         });
     });
 
-    describe.skip("SetVote :", function () {
+    describe("SetVote :", function () {
         beforeEach(async function () {
             VotingInstance = await Voting.new({from:owner});
 
