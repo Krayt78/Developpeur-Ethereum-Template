@@ -26,7 +26,7 @@ contract('Voting', accounts => {
 
         describe("1- onlyOwner()", function () {
             it("should not add voter, revert", async () => {
-                await expectRevert.unspecified(VotingInstance.addVoter(first, { from: third }));
+                await expectRevert(VotingInstance.addVoter(first, { from: third }),"Ownable: caller is not the owner");
             });
         });
 
