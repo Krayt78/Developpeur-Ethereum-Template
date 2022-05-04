@@ -10,9 +10,7 @@ module.exports = {
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
-
     
-
     provider: function(){ 
        return new HDWalletProvider(
          '${process.env.MNEMONIC}', 
